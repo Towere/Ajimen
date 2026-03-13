@@ -17,7 +17,7 @@ PRODUCTS_JSON_PATH = BASE_DIR / "products.json"
 
 # 通义千问API配置
 # TODO: 请替换为你的阿里云通义千问API密钥
-QIANWEN_API_KEY = "sk-7757ceec9c424953b6549d4c5eb14886"
+QIANWEN_API_KEY = "your api key"
 QIANWEN_API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
 QIANWEN_MODEL = "qwen-turbo"
 # API调用超时时间（秒）
