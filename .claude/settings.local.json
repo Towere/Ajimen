@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m py_compile config.py)",
+      "Bash(python -m py_compile database.py)",
+      "Bash(python -m py_compile knowledge_base.py)",
+      "Bash(python -m py_compile qianwen_api.py)",
+      "Bash(python -m py_compile chat_service.py)",
+      "Bash(python -m py_compile main.py)",
+      "Bash(python -m py_compile test_chat_service.py)"
+    ]
+  }
+}

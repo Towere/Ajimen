@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商智能客服 - 聊天界面</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>电商智能客服</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-id-input">
+                    <label for="userId">用户ID:</label>
+                    <input type="text" id="userId" value="user_001" placeholder="输入用户ID">
+                    <button id="refreshUser" title="生成新用户ID">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <button id="clearHistory" class="btn-clear">
+                    <i class="fas fa-trash"></i> 清空历史
+                </button>
+            </div>
+        </header>
+
+        <div class="chat-container">
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-shopping-cart"></i> 快速商品查询</h3>
+                    <div class="quick-queries">
+                        <button class="quick-btn" data-query="推荐手机">
+                            <i class="fas fa-mobile-alt"></i> 手机推荐
+                        </button>
+                        <button class="quick-btn" data-query="电视价格">
+                            <i class="fas fa-tv"></i> 电视价格
+                        </button>
+                        <button class="quick-btn" data-query="笔记本电脑">
+                            <i class="fas fa-laptop"></i> 笔记本电脑
+                        </button>
+                        <button class="quick-btn" data-query="耳机推荐">
+                            <i class="fas fa-headphones"></i> 耳机推荐
+                        </button>
+                        <button class="quick-btn" data-query="库存情况">
+                            <i class="fas fa-boxes"></i> 库存查询
+                        </button>
+                        <button class="quick-btn" data-query="物流信息">
+                            <i class="fas fa-shipping-fast"></i> 物流查询
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-info-circle"></i> 系统状态</h3>
+                    <div class="status-indicators">
+                        <div class="status-item">
+                            <span class="status-label">API状态:</span>
+                            <span id="apiStatus" class="status-badge status-unknown">
+                                <i class="fas fa-question-circle"></i> 检查中...
+                            </span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">商品数量:</span>
+                            <span id="productCount" class="status-badge">--</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">对话记录:</span>
+                            <span id="conversationCount" class="status-badge">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-link"></i> API文档</h3>
+                    <div class="api-links">
+                        <a href="/docs" target="_blank" class="api-link">
+                            <i class="fas fa-book"></i> Swagger UI
+                        </a>
+                        <a href="/redoc" target="_blank" class="api-link">
+                            <i class="fas fa-file-alt"></i> ReDoc
+                        </a>
+                        <a href="/health" target="_blank" class="api-link">
+                            <i class="fas fa-heartbeat"></i> 健康检查
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-chat">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- 消息会在这里动态添加 -->
+                    <div class="message welcome">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-sender">智能客服</div>
+                            <div class="message-text">
+                                欢迎使用电商智能客服！我是您的AI助手，可以帮您查询商品信息、价格、库存，以及回答其他相关问题。
+                                <br><br>
+                                <strong>试试以下功能：</strong>
+                                <ul>
+                                    <li>询问商品价格和库存</li>
+                                    <li>获取商品推荐</li>
+                                    <li>查询物流和售后信息</li>
+                                    <li>使用左侧的快速查询按钮</li>
+                                </ul>
+                            </div>
+                            <div class="message-time">现在</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-group">
+                        <input type="text" id="messageInput"
+                               placeholder="输入您的问题，例如：华为手机多少钱？"
+                               autocomplete="off">
+                        <button id="sendButton" class="btn-send">
+                            <i class="fas fa-paper-plane"></i> 发送
+                        </button>
+                    </div>
+                    <div class="input-hints">
+                        <span class="hint">按 Enter 发送，Shift+Enter 换行</span>
+                        <span class="hint" id="typingIndicator" style="display: none;">
+                            <i class="fas fa-circle-notch fa-spin"></i> 智能客服正在思考...
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-suggestions" id="productSuggestions">
+            <h3><i class="fas fa-lightbulb"></i> 商品建议</h3>
+            <div class="products-container" id="productsContainer">
+                <div class="empty-products">暂无商品建议，开始对话后这里会显示相关商品</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>电商智能客服 MVP 版本 | 基于 FastAPI + 通义千问API + SQLite</p>
+            <p>API地址: <code>http://localhost:8000</code> | 服务状态: <span id="serviceStatus">运行中</span></p>
+        </footer>
+    </div>
+
+    <!-- 消息模板 -->
+    <template id="userMessageTemplate">
+        <div class="message user">
+            <div class="message-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-sender">您</div>
+                <div class="message-text"></div>
+                <div class="message-time"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="botMessageTemplate">
+        <div class="message bot">
+            <div class="message-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-sender">智能客服</div>
+                <div class="message-text"></div>
+                <div class="message-time"></div>
+                <div class="message-metadata"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- 商品卡片模板 -->
+    <template id="productCardTemplate">
+        <div class="product-card">
+            <div class="product-header">
+                <h4 class="product-name"></h4>
+                <span class="product-price"></span>
+            </div>
+            <div class="product-description"></div>
+            <div class="product-details">
+                <span class="product-category"></span>
+                <span class="product-stock"></span>
+            </div>
+            <div class="product-actions">
+                <button class="btn-product-action" data-action="query">
+                    <i class="fas fa-search"></i> 查询详情
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <script src="chat.js"></script>
+</body>
+</html>
